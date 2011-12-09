@@ -1,0 +1,59 @@
+
+README
+
+I completed a simple peer-to-peer distributed hash table(DHT), and deployed it into the cloud.
+
+Development
+
+DHT Implementation
+
+I use an untested DHT implementation(class) in my application. It offers several operations 
+(insert, put, get, delete, drop) to the users.
+The relevant source code under edu.stevens.cs.cs549.dhtnode.
+
+DHT Activity class
+
+The DHTActivity class implements the main program logic by DHT offered.
+The source code under edu.stevens.cs.cs549.dht.activities.
+
+DHT Resource class
+
+DHTResource class uses the Jersey API to implement the DHT REST web services. 
+It invokes the routines supplied by DHTActivity. Since my RESTful service has 
+state that is persisted across service calls, use the @Singleton annotation in
+Jersey to declare that there is a single instance of the Node resource for a given URI, 
+that is shared among all accesses to that resource.
+The source code under edu.stevens.cs.cs549.dht.resources.
+
+DHT Server Main class
+
+The Main class is the entry for the server. The server runs as stand alone Java programs, 
+using an embedded Grizzly Web server.
+The source code under edu.stevens.cs.cs549.rest.hello.
+
+Deployment
+
+I have deployed the server application on the Amazon EC2 successfully. The critical steps are list below:
+Change the Uri to meet the EC2 instance in getBaseUri().
+Open 9090 port for EC2 instance.
+Transfer the server jar file (MyDHTServer-0.0.1-SNAPSHOT-jar-with-dependencies.jar) to the EC2 instance by scp command.
+	scp -i cs549key.pem MyDHTServer-0.0.1-SNAPSHOT-jar-with-dependencies.jar 
+	ec2-user@ec2-184-73-98-162.compute-1.amazonaws.com:
+Run the server jar on the EC2 instance.
+	Java -jar MyDHTServer-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+Then you can access the service by client.
+
+---------------------------------------------------------------------------------------------
+
+Import this project into Eclipse as a Maven project.
+
+Run as an application, with main class edu.stevens.cs.cs549.rest.hello.Main.
+
+To run from the command line, navigate to the root folder of the Maven project,
+and type "mvn exec:java".
+
+To test the running program, from another window type:
+
+curl http://localhost/?name=Joe
+
+or type this into the url window of your browser.
